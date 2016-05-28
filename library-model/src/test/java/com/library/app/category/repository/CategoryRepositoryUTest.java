@@ -135,6 +135,16 @@ public class CategoryRepositoryUTest {
 	}
 	
 	@Test
+	public void existsById(){
+		final Long categoryAddedId = dbCommandTransactionalExecutor.executeCommand(()->{
+			return categoryRepository.add(java()).getId();
+		});
+		
+		assertThat(categoryRepository.existsById(categoryAddedId), is(equalTo(true)));
+		assertThat(categoryRepository.existsById(999L), is(equalTo(false)));
+	}
+	
+	@Test
 	public void deleteCategory(){
 		final Long categoryAddedId = dbCommandTransactionalExecutor.executeCommand(()->{
 			return categoryRepository.add(java()).getId();

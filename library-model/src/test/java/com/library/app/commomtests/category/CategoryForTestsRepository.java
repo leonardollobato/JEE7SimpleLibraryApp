@@ -22,6 +22,11 @@ public class CategoryForTestsRepository {
 	public static Category java(){
 		return new Category("Java");
 	}
+	
+	public static Category categoryWithId(Category category, Long id){
+		category.setId(id);
+		return category;
+	}
 	public static List<Category> allCategories(){
 		return Arrays.asList(architecture(),cleanCode(),java(),networks());
 	}
