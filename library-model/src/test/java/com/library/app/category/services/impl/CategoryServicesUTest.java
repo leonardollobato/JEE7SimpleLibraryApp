@@ -73,4 +73,37 @@ public class CategoryServicesUTest {
 			assertThat(e.getFieldName(), is(equalTo("name")));
 		}
 	}
+	
+	@Test
+	public void updateWithNullName(){
+		updateCategoryWithInvalidName(null);
+	}
+	
+	@Test
+	public void updateCategoryWithShortName(){
+		updateCategoryWithInvalidName("A");
+	}
+	
+	@Test
+	public void updateCategoryWithLongName(){
+		updateCategoryWithInvalidName("This is a long name that will cause a exception to be thrown");
+	}
+	
+	@Test(expected = CategoryExistentException.class)
+	public void updateCategoryWithExistentName(){
+		when(categoryRepository
+				.alreadyExists(categoryWithId(java(), 1L)))
+				.thenReturn(true);
+		
+		categoryService.update(categoryWithId(java(), 1L));
+	}
+	
+	private void updateCategoryWithInvalidName(String name){
+		try{
+			categoryService.update(new Category(name));
+			fail("An error should have been thrown");
+		}catch(FieldNotValidException e){
+			assertThat(e.getFieldName(), is(equalTo("name")));
+		}
+	}
 }

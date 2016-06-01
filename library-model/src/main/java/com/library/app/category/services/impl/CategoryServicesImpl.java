@@ -32,4 +32,19 @@ public class CategoryServicesImpl implements CategoryServices {
 		return categoryRepository.add(category);
 	}
 
+	@Override
+	public void update(Category category) throws FieldNotValidException {
+		Set<ConstraintViolation<Category>> erros = validator.validate(category);
+		Iterator<ConstraintViolation<Category>> itErrors = erros.iterator();
+
+		if (itErrors.hasNext()) {
+			final ConstraintViolation<Category> violation = itErrors.next();
+			throw new FieldNotValidException(violation.getPropertyPath().toString(), violation.getMessage());
+		}
+		
+		if(categoryRepository.alreadyExists(category)){
+			throw new CategoryExistentException();
+		}
+	}
+
 }
